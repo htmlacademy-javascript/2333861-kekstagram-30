@@ -6,6 +6,7 @@ function checkStringLength(string, length) {
   return false;
 }
 
+
 function checkPalindrome(string) {
   const fixString = string.replaceAll(' ', '').toLowerCase();
   let compareStr = '';
@@ -16,6 +17,7 @@ function checkPalindrome(string) {
 
   return fixString === compareStr;
 }
+
 
 function getNumber(string) {
   let parseString = '';
