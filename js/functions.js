@@ -5,7 +5,6 @@ function checkStringLength(string, length) {
 
   return false;
 }
-
 checkStringLength('как рабоатет этот линт', 30);
 
 function checkPalindrome(string) {
@@ -18,7 +17,6 @@ function checkPalindrome(string) {
 
   return fixString === compareStr;
 }
-
 checkPalindrome('шалаш');
 
 
@@ -33,5 +31,4 @@ function getNumber(string) {
 
   return parseString ? Math.round(parseString) : NaN;
 }
-
 getNumber('верните 2007');
