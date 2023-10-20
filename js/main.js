@@ -5,6 +5,7 @@ const getRandomNumber = (a, b) => {
   return Math.floor(result);
 };
 
+
 const createRandomValue = (min, max) => {
   const previousValues = [];
 
@@ -42,19 +43,32 @@ const NAMES = [
   'Сема'
 ];
 
+const DESC_PHOTO = [
+  'шикарное фото',
+  'замечательное фото',
+  'свежее фото',
+  'удивительное фото',
+  'классное фото',
+  'вау фото'
+];
+
+
 const createComments = () => ({
-  id: createRandomValue(1, Infinity)(),
+  id: createRandomValue(1, 500)(),
   avatar: `img/avatar-${createRandomValue(1, 6)()}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
 });
 
 
-const photoCard = {
+const photoCard = () => ({
   id: createRandomValue(1, 25)(),
   url: `photos/${createRandomValue(1, 25)()}.jpg`,
-  description: 'очень красивое фото',
+  description: getRandomArrayElement(DESC_PHOTO),
   likes: getRandomNumber(15, 200),
   comments: Array.from({ length: getRandomNumber(0, 30) }, createComments),
-};
+});
+
+const allCards = Array.from({ length: 25 }, photoCard);
+
 
