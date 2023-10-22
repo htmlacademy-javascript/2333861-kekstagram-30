@@ -1,28 +1,7 @@
-const getRandomNumber = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
-
-
-const createRandomValue = (min, max) => {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomNumber(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomNumber(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
-
-const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
+const OBJECT_VALUE = 25;
+const PHOTO_VALUE = 25;
+const LIKES_VALUE__MIN = 15;
+const LIKES_VALUE__MAX = 200;
 
 const MESSAGES = [
   'Всё отлично!',
@@ -52,9 +31,37 @@ const DESC_PHOTO = [
   'вау фото'
 ];
 
+const getRandomNumber = (a, b) => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
+
+const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
+
+const createRandomValue = (min, max) => {
+  const previousValues = [];
+
+  return function () {
+    let currentValue = getRandomNumber(min, max);
+    if (previousValues.length >= (max - min + 1)) {
+      return null;
+    }
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomNumber(min, max);
+    }
+    previousValues.push(currentValue);
+    return currentValue;
+  };
+};
+
+const getPhotoId = createRandomValue(1, OBJECT_VALUE);
+const getPhotoSrc = createRandomValue(1, PHOTO_VALUE);
+const getCommentId = createRandomValue(1, 500);
 
 const createComments = () => ({
-  id: createRandomValue(1, 500)(),
+  id: getCommentId(),
   avatar: `img/avatar-${createRandomValue(1, 6)()}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
@@ -62,13 +69,12 @@ const createComments = () => ({
 
 
 const photoCard = () => ({
-  id: createRandomValue(1, 25)(),
-  url: `photos/${createRandomValue(1, 25)()}.jpg`,
+  id: getPhotoId(),
+  url: `photos/${getPhotoSrc()}.jpg`,
   description: getRandomArrayElement(DESC_PHOTO),
-  likes: getRandomNumber(15, 200),
+  likes: getRandomNumber(LIKES_VALUE__MIN, LIKES_VALUE__MAX),
   comments: Array.from({ length: getRandomNumber(0, 30) }, createComments),
 });
 
 const allCards = Array.from({ length: 25 }, photoCard);
-
 
