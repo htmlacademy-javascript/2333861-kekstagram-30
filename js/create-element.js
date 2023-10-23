@@ -1,5 +1,5 @@
 import { OBJECT_VALUE, PHOTO_VALUE, LIKES_VALUE__MIN, LIKES_VALUE__MAX, MESSAGES, NAMES, DESC_PHOTO } from './data';
-import { getRandomNumber, createRandomValue } from './until';
+import { getRandomNumber, createRandomValue } from './util';
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 const getPhotoId = createRandomValue(1, OBJECT_VALUE);
