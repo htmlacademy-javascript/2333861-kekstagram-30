@@ -1,13 +1,14 @@
-function checkStringLength(string, length) {
+const checkStringLength = (string, length) => {
   if (string.length <= length) {
     return true;
   }
 
   return false;
-}
+};
+
 checkStringLength('как рабоатет этот линт', 30);
 
-function checkPalindrome(string) {
+const checkPalindrome = (string) => {
   const fixString = string.replaceAll(' ', '').toLowerCase();
   let compareStr = '';
 
@@ -16,11 +17,11 @@ function checkPalindrome(string) {
   }
 
   return fixString === compareStr;
-}
+};
 checkPalindrome('шалаш');
 
 
-function getNumber(string) {
+const getNumber = (string) => {
   let parseString = '';
   for (let i = 0; i < string.length; i++) {
     const value = parseInt(string[i], 10);
@@ -30,5 +31,5 @@ function getNumber(string) {
   }
 
   return parseString ? Math.round(parseString) : NaN;
-}
+};
 getNumber('верните 2007');
