@@ -1,3 +1,7 @@
+import { getRandomNumber, getRandomArrayElement, createIdGenerator } from './util.js';
+
+const PICTURE_COUNT = 25;
+const AVATAR_COUNT = 6;
 const OBJECT_VALUE = 25;
 const PHOTO_VALUE = 25;
 const LIKES_VALUE__MIN = 15;
@@ -31,4 +35,31 @@ const DESC_PHOTO = [
   'вау фото'
 ];
 
-export { OBJECT_VALUE, PHOTO_VALUE, LIKES_VALUE__MIN, LIKES_VALUE__MAX, MESSAGES, NAMES, DESC_PHOTO };
+const getPhotoId = createIdGenerator(1, OBJECT_VALUE);
+const getPhotoSrc = createIdGenerator(1, PHOTO_VALUE);
+const getCommentId = createIdGenerator(1, 500);
+
+
+const createComments = () => ({
+  id: getCommentId(),
+  avatar: `img/avatar-${getRandomNumber(1, AVATAR_COUNT)}.svg`,
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(NAMES),
+});
+
+
+const createPicture = () => ({
+  id: getPhotoId(),
+  url: `photos/${getPhotoSrc()}.jpg`,
+  description: getRandomArrayElement(DESC_PHOTO),
+  likes: getRandomNumber(LIKES_VALUE__MIN, LIKES_VALUE__MAX),
+  comments: Array.from({ length: getRandomNumber(0, 30) }, createComments),
+});
+
+
+const getPicture = () => Array.from(
+  { length: PICTURE_COUNT },
+  createPicture
+);
+
+export { getPicture };

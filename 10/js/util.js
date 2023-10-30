@@ -5,20 +5,15 @@ const getRandomNumber = (a, b) => {
   return Math.floor(result);
 };
 
-const createRandomValue = (min, max) => {
-  const previousValues = [];
+const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
+
+const createIdGenerator = () => {
+  let lastGenerateId = 0;
 
   return function () {
-    let currentValue = getRandomNumber(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomNumber(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
+    lastGenerateId += 1;
+    return lastGenerateId;
   };
 };
 
-export {getRandomNumber, createRandomValue};
+export { getRandomNumber, getRandomArrayElement, createIdGenerator };
