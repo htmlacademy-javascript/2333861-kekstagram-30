@@ -1,4 +1,4 @@
-import { photoCard } from './create-element';
+import { createPictures } from './mini-photo.js';
 
-const allCards = Array.from({ length: 25 }, photoCard);
+createPictures();
 
