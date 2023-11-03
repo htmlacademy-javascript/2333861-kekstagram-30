@@ -1,6 +1,11 @@
 import { createPictures } from './mini-photo.js';
 import { getPicture } from './data.js';
-import './large-image.js';
+import { createBigPhoto } from './large-image.js';
 
-createPictures(getPicture());
+const arrayPhoto = getPicture();
+
+createPictures(arrayPhoto);
+
+createBigPhoto(arrayPhoto);
+
 

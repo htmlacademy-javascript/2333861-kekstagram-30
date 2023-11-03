@@ -5,10 +5,12 @@ const photoCard = template.querySelector('.picture');
 const createPictures = (arr) => {
   const containerCards = document.createDocumentFragment();
 
-  arr.forEach(({ url, description, comments, likes }) => {
+  arr.forEach(({ id, url, description, comments, likes }) => {
     const card = photoCard.cloneNode(true);
-    card.querySelector('.picture__img').src = url;
-    card.querySelector('.picture__img').alt = description;
+    const cardImage = card.querySelector('.picture__img');
+    cardImage.setAttribute('data-id', id);
+    cardImage.src = url;
+    cardImage.alt = description;
     card.querySelector('.picture__comments').textContent = comments.length;
     card.querySelector('.picture__likes').textContent = likes;
     containerCards.appendChild(card);
@@ -16,6 +18,7 @@ const createPictures = (arr) => {
 
   photoContainer.appendChild(containerCards);
 };
+
 
 export { createPictures };
 
