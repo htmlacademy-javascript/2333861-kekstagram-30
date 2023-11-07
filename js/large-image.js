@@ -1,10 +1,13 @@
 import { isKeyEscape } from './util.js';
+import { createComments, addMoreComments } from './mini-photo.js';
 const bigPicture = document.querySelector('.big-picture');
 const allPicture = document.querySelector('.pictures');
 const closePicture = document.querySelector('.big-picture__cancel');
-const commentContainer = bigPicture.querySelector('.social__comments');
+const commentContainer = bigPicture.querySelector('.social__comments');//контейнер с комментами
 const template = commentContainer.querySelector('#comment').content;
 const commentsBigPic = template.querySelector('.social__comment');
+const btnMoreComments = document.querySelector('.social__comments-loader');//кнопка загрузки
+const prevComments = document.querySelector('.social__comment-shown-count');//кол-во показанных ком-риев
 
 const onKeyEsc = (evt) => {
   if (isKeyEscape(evt)) {
@@ -13,11 +16,17 @@ const onKeyEsc = (evt) => {
   }
 };
 
+function uploadComments(comments) {
+  if (comments < 5) {
+    prevComments.textContent = comments;
+  } else {
+    prevComments.textContent = 5;
+  }
+}
+
 function openModal() {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  document.querySelector('.social__comment-count').classList.add('hidden');
-  document.querySelector('.comments-loader').classList.add('hidden');
   document.addEventListener('keydown', onKeyEsc);
 }
 
@@ -29,6 +38,12 @@ function closeModal() {
   document.removeEventListener('keydown', onKeyEsc);
 }
 
+function moreComments(item, container) {
+  btnMoreComments.addEventListener('click', () => {
+    addMoreComments(item.comments, commentsBigPic, container);
+    commentContainer.append(container);
+  });
+}
 
 const createBigPhoto = (arr) => {
   allPicture.addEventListener('click', (evt) => {
@@ -41,25 +56,22 @@ const createBigPhoto = (arr) => {
         bigPicture.querySelector('.social__comment-total-count').textContent = item.comments.length;
         bigPicture.querySelector('.social__caption').textContent = item.description;
 
-        const containerComments = document.createDocumentFragment();
-        item.comments.forEach(({ avatar, message }) => {
-          const commentBigPic = commentsBigPic.cloneNode(true);
-          commentBigPic.querySelector('.social__picture').src = avatar;
-          commentBigPic.querySelector('.social__picture').alt = 'Аватар комментатора фотографии';
-          commentBigPic.querySelector('.social__text').textContent = message;
-          containerComments.append(commentBigPic);
-        });
+        uploadComments(item.comments.length);
 
+        const containerComments = document.createDocumentFragment();
+        createComments(item.comments, commentsBigPic, containerComments);
         commentContainer.append(containerComments);
+
+        moreComments(item, containerComments);
       }
       openModal();
     }
   });
 };
 
-
 closePicture.addEventListener('click', () => {
   closeModal();
 });
 
 export { createBigPhoto };
+
