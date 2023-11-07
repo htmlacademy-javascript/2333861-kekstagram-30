@@ -19,31 +19,6 @@ const createPictures = (arr) => {
   photoContainer.appendChild(containerCards);
 };
 
-const createComments = (arr, parent, container) => {
-  const firstFiveComments = arr.slice(0, 5);
-  firstFiveComments.forEach(({ avatar, message }) => {
-    const commentBigPic = parent.cloneNode(true);
-    commentBigPic.querySelector('.social__picture').src = avatar;
-    commentBigPic.querySelector('.social__picture').alt = 'Аватар комментатора фотографии';
-    commentBigPic.querySelector('.social__text').textContent = message;
-    container.append(commentBigPic);
-  });
-};
-
-let commentIndex = 5;
-const addMoreComments = (arr, parent, container) => {
-  const nextFiveComments = arr.slice(commentIndex, commentIndex + 5);
-  nextFiveComments.forEach(({ avatar, message }) => {
-    const commentBigPic = parent.cloneNode(true);
-    commentBigPic.querySelector('.social__picture').src = avatar;
-    commentBigPic.querySelector('.social__picture').alt = 'Аватар комментатора фотографии';
-    commentBigPic.querySelector('.social__text').textContent = message;
-    container.append(commentBigPic);
-  });
-  commentIndex += 5;
-};
-
-
-export { createPictures, createComments, addMoreComments };
+export { createPictures };
 
 

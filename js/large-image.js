@@ -1,13 +1,58 @@
 import { isKeyEscape } from './util.js';
-import { createComments, addMoreComments } from './mini-photo.js';
 const bigPicture = document.querySelector('.big-picture');
 const allPicture = document.querySelector('.pictures');
 const closePicture = document.querySelector('.big-picture__cancel');
-const commentContainer = bigPicture.querySelector('.social__comments');//контейнер с комментами
-const template = commentContainer.querySelector('#comment').content;
+
+const COMMENTS_COUNT = 5;
+
+const template = document.querySelector('#comment').content;
 const commentsBigPic = template.querySelector('.social__comment');
-const btnMoreComments = document.querySelector('.social__comments-loader');//кнопка загрузки
-const prevComments = document.querySelector('.social__comment-shown-count');//кол-во показанных ком-риев
+const commentContainer = bigPicture.querySelector('.social__comments');
+const commentsCount = bigPicture.querySelector('.social__comment-shown-count');
+const commentsCountTotal = bigPicture.querySelector('.social__comment-total-count');
+const btnMoreComments = bigPicture.querySelector('.social__comments-loader');
+
+let commentsCountShown = 0;
+let comments = [];
+
+const createComment = ({ avatar, message, name }) => {
+  const newComment = commentsBigPic.cloneNode(true);
+  newComment.querySelector('.social__picture').src = avatar;
+  newComment.querySelector('.social__picture').alt = name;
+  newComment.querySelector('.social__text').textContent = message;
+
+  return newComment;
+};
+
+
+const renderComments = () => {
+  commentsCountShown += COMMENTS_COUNT;
+
+  if (commentsCountShown >= comments.length) {
+    btnMoreComments.classList.add('hidden');
+    commentsCount.textContent = comments.length;
+  } else {
+    btnMoreComments.classList.remove('hidden');
+  }
+
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < commentsCountShown; i++) {
+    const comment = createComment(comments[i]);
+    fragment.append(comment);
+  }
+
+  commentContainer.innerHTML = '';
+  commentContainer.append(fragment);
+
+  commentsCount.textContent = commentsCountShown;
+  commentsCountTotal.textContent = comments.length;
+};
+
+
+const onCommentsloaderClick = () => {
+  renderComments();
+};
+
 
 const onKeyEsc = (evt) => {
   if (isKeyEscape(evt)) {
@@ -16,14 +61,6 @@ const onKeyEsc = (evt) => {
   }
 };
 
-function uploadComments(comments) {
-  if (comments < 5) {
-    prevComments.textContent = comments;
-  } else {
-    prevComments.textContent = 5;
-  }
-}
-
 function openModal() {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -31,18 +68,10 @@ function openModal() {
 }
 
 function closeModal() {
+  commentsCountShown = 0;
   bigPicture.classList.add('hidden');
-
-  commentContainer.innerHTML = '';
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onKeyEsc);
-}
-
-function moreComments(item, container) {
-  btnMoreComments.addEventListener('click', () => {
-    addMoreComments(item.comments, commentsBigPic, container);
-    commentContainer.append(container);
-  });
 }
 
 const createBigPhoto = (arr) => {
@@ -56,22 +85,18 @@ const createBigPhoto = (arr) => {
         bigPicture.querySelector('.social__comment-total-count').textContent = item.comments.length;
         bigPicture.querySelector('.social__caption').textContent = item.description;
 
-        uploadComments(item.comments.length);
-
-        const containerComments = document.createDocumentFragment();
-        createComments(item.comments, commentsBigPic, containerComments);
-        commentContainer.append(containerComments);
-
-        moreComments(item, containerComments);
+        comments = item.comments;
+        if (comments.length > 0) {
+          renderComments();
+        }
       }
       openModal();
     }
   });
 };
 
-closePicture.addEventListener('click', () => {
-  closeModal();
-});
+closePicture.addEventListener('click', closeModal);
+btnMoreComments.addEventListener('click', onCommentsloaderClick);
 
 export { createBigPhoto };
 
