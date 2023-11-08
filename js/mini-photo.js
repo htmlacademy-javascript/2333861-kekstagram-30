@@ -19,7 +19,6 @@ const createPictures = (arr) => {
   photoContainer.appendChild(containerCards);
 };
 
-
 export { createPictures };
 
 
