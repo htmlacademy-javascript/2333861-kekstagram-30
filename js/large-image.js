@@ -26,7 +26,14 @@ const createComment = ({ avatar, message, name }) => {
 
 
 const renderComments = () => {
-  commentsCountShown += COMMENTS_COUNT;
+  if (comments.length >= 5) {
+    commentsCountShown += COMMENTS_COUNT;
+    if (commentsCountShown > comments.length) {
+      commentsCountShown = comments.length;
+    }
+  } else {
+    commentsCountShown = comments.length;
+  }
 
   if (commentsCountShown >= comments.length) {
     btnMoreComments.classList.add('hidden');
@@ -88,6 +95,11 @@ const createBigPhoto = (arr) => {
         comments = item.comments;
         if (comments.length > 0) {
           renderComments();
+        } else {
+          commentContainer.innerHTML = '';
+          btnMoreComments.classList.add('hidden');
+          commentsCount.textContent = 0;
+
         }
       }
       openModal();
@@ -99,4 +111,3 @@ closePicture.addEventListener('click', closeModal);
 btnMoreComments.addEventListener('click', onCommentsloaderClick);
 
 export { createBigPhoto };
-
