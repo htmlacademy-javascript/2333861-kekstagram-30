@@ -83,7 +83,7 @@ function closeModal() {
 
 const createBigPhoto = (arr) => {
   allPicture.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('picture__img')) {
+    if (evt.target.closest('.picture')) {
       const idItem = Number(evt.target.dataset.id);
       const item = arr.find((el) => el.id === idItem);
       if (item) {
