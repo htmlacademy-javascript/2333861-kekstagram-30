@@ -6,7 +6,6 @@ const hashPicture = formUpload.querySelector('.text__hashtags'); //поле дл
 const commentPicture = formUpload.querySelector('.text__description'); //поле для комментов
 const previewPictureClose = formUpload.querySelector('.img-upload__cancel'); //крестик
 
-
 const formAttr = () => {
   formUpload.setAttribute('method', 'POST');
   formUpload.setAttribute('enctype', 'multipart/form-data');
@@ -30,19 +29,22 @@ function openModal() {
   formPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onKeyEsc);
+  hashPicture.addEventListener('keydown', stopPropagationOnFocus);
+  commentPicture.addEventListener('keydown', stopPropagationOnFocus);
 }
 
 function closeModal() {
   formPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onKeyEsc);
+  hashPicture.removeEventListener('keydown', stopPropagationOnFocus);
+  commentPicture.removeEventListener('keydown', stopPropagationOnFocus);
   loadPicture.value = '';
 }
 
 loadPicture.addEventListener('change', openModal);
 previewPictureClose.addEventListener('click', closeModal);
-hashPicture.addEventListener('keydown', stopPropagationOnFocus);
-commentPicture.addEventListener('keydown', stopPropagationOnFocus);
+
 
 window.onload = function () {
   formAttr();
@@ -53,20 +55,33 @@ window.onload = function () {
     errorTextClass: 'img-upload__field-wrapper__error-text'
   });
 
-  function validateHashLength(value) {
-    return value.length >= 2 && value.length <= 20;
-  }
-
-  function validateFirstSymbol(value) {
-    return value[0] === '#' && value !== '#';
-  }
-
   function validateCommentLength(value) {
     return value.length <= 140;
   }
 
-  pristine.addValidator(hashPicture, validateHashLength, 'от 2 до 20 символов');
-  pristine.addValidator(hashPicture, validateFirstSymbol, 'хэш-тэги начинаются с символа # и не могут состоять только из #');
+  function validateHashTag(value) {
+    const arr = value.split(' ');
+    const hashtag = /^#[a-zа-яё0-9]{1,19}$/i;
+
+    if (arr.length - 1 > 5) {
+      return false;
+    }
+
+    const obj = {};
+    for (let i = 0; i < arr.length; i++) {
+      if (obj[arr[i]]) {
+        return false;
+      } else {
+        obj[arr[i]] = 1;
+      }
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      return hashtag.test(arr[i]);
+    }
+  }
+
+  pristine.addValidator(hashPicture, validateHashTag, 'форма заполнена некорректно');
   pristine.addValidator(commentPicture, validateCommentLength, 'не более 140 символов');
 
 
