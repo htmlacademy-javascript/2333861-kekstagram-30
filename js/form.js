@@ -1,4 +1,10 @@
 import { isKeyEscape } from './util.js';
+import { onClickScale } from './scale.js';
+import {
+  init as initEffect,
+  reset as resetEffect
+} from './effects.js';
+
 const MAX_HASHTAG_COUNT = 5;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const errorText = {
@@ -6,13 +12,13 @@ const errorText = {
   NOT_UNIQUE: 'Хэштеги должны быть уникальными',
   INVALID_PATTERN: 'Неправильный хэштег'
 };
-
 const formUpload = document.querySelector('#upload-select-image');
 const loadPicture = formUpload.querySelector('.img-upload__input');
-const formPicture = formUpload.querySelector('.img-upload__overlay'); //форма с редактированием изображения
-const hashPicture = formUpload.querySelector('.text__hashtags'); //поле для хэштегов
-const commentPicture = formUpload.querySelector('.text__description'); //поле для комментов
-const previewPictureClose = formUpload.querySelector('.img-upload__cancel'); //крестик
+const formPicture = formUpload.querySelector('.img-upload__overlay');
+const hashPicture = formUpload.querySelector('.text__hashtags');
+const commentPicture = formUpload.querySelector('.text__description');
+const previewPictureClose = formUpload.querySelector('.img-upload__cancel');
+const scaleControl = formUpload.querySelector('.img-upload__scale');
 
 const stopPropagationOnFocus = (evt) => {
   if (isKeyEscape(evt)) {
@@ -77,15 +83,6 @@ pristine.addValidator(
 
 pristine.addValidator(commentPicture, validateCommentLength, 'не более 140 символов');
 
-
-formUpload.addEventListener('submit', (evt) => {
-  const isValide = pristine.validate();
-  if (!isValide) {
-    evt.preventDefault();
-  }
-});
-
-
 function openModal() {
   formPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -96,7 +93,8 @@ function openModal() {
 
 function closeModal() {
   formUpload.reset();
-  pristine.reset(); //убирает слушатель валидации
+  pristine.reset();
+  resetEffect();
   formPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onKeyEsc);
@@ -104,5 +102,14 @@ function closeModal() {
   commentPicture.removeEventListener('keydown', stopPropagationOnFocus);
 }
 
+
+scaleControl.addEventListener('click', onClickScale);
 loadPicture.addEventListener('change', openModal);
 previewPictureClose.addEventListener('click', closeModal);
+formUpload.addEventListener('submit', (evt) => {
+  const isValide = pristine.validate();
+  if (!isValide) {
+    evt.preventDefault();
+  }
+});
+initEffect();
