@@ -1,19 +1,18 @@
 import { createPictures } from './mini-photo.js';
 import { createBigPhoto } from './large-image.js';
 import './form.js';
-import { showError } from './util.js';
+import { showLoadError } from './util.js';
+import { getAllPhoto } from './api.js';
 
 
-fetch('https://30.javascript.pages.academy/kekstagram/dat')
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      showError();
-    }
-  })
-  .then((photos) => {
-    createPictures(photos);
-    createBigPhoto(photos);
-  })
-  .catch(() => showError());
+const bootstrap = async () => {
+  try {
+    const pictures = await getAllPhoto();
+    createPictures(pictures);
+    createBigPhoto(pictures);
+  } catch (err) {
+    showLoadError();
+  }
+};
+
+bootstrap();

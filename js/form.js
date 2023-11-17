@@ -4,6 +4,7 @@ import {
   init as initEffect,
   reset as resetEffect
 } from './effects.js';
+import { sendPhoto } from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -20,6 +21,16 @@ const commentPicture = formUpload.querySelector('.text__description');
 const previewPictureClose = formUpload.querySelector('.img-upload__cancel');
 const scaleControl = formUpload.querySelector('.img-upload__scale');
 const imageElement = formUpload.querySelector('.img-upload__preview img');
+const buttonSubmit = formUpload.querySelector('.img-upload__submit');
+const submitButtonCaption = {
+  SUBMITTING: 'Отправляю..',
+  IDLE: 'Опубликовать'
+};
+
+const toggleSubmitButton = (isDisabled) => {
+  buttonSubmit.disabled = isDisabled;
+  buttonSubmit.textContent = isDisabled ? submitButtonCaption.SUBMITTING : submitButtonCaption.IDLE;
+};
 
 const stopPropagationOnFocus = (evt) => {
   if (isKeyEscape(evt)) {
@@ -106,15 +117,22 @@ function closeModal() {
   scaleControl.removeEventListener('click', onClickScale);
 }
 
-
 loadPicture.addEventListener('change', openModal);
 
 previewPictureClose.addEventListener('click', closeModal);
 
 formUpload.addEventListener('submit', (evt) => {
+  evt.preventDefault();
   const isValide = pristine.validate();
-  if (!isValide) {
-    evt.preventDefault();
+  if (isValide) {
+    toggleSubmitButton(true);
+    const formData = new FormData(evt.target);
+    sendPhoto(formData);
+    toggleSubmitButton(false);
+    closeModal();
   }
 });
+
+
 initEffect();
+

@@ -1,26 +1,8 @@
-const getRandomNumber = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
-
-const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
-
-const createIdGenerator = () => {
-  let lastGenerateId = 0;
-
-  return function () {
-    lastGenerateId += 1;
-    return lastGenerateId;
-  };
-};
-
 const isKeyEscape = (evt) => evt.key === 'Escape';
 
-const showError = () => {
-  const template = document.querySelector('#data-error').content;
-  const error = template.querySelector('.data-error');
+const showLoadError = () => {
+  const template = document.querySelector('#data-error').content.querySelector('.data-error');
+  const error = template.cloneNode(true);
   document.body.append(error);
 
   setTimeout(() => {
@@ -28,4 +10,27 @@ const showError = () => {
   }, 5000);
 };
 
-export { getRandomNumber, getRandomArrayElement, createIdGenerator, isKeyEscape, showError };
+//const showFormSend = () => {
+//  const template = document.querySelector('#success').content;
+//  const send = template.querySelector('.success');
+//  const closeSendBtn = template.querySelector('.success__button');
+//  document.body.append(send);
+
+//  closeSendBtn.addEventListener('click', () => {
+//    send.remove();
+//  });
+//};
+
+const showFormError = () => {
+  const template = document.querySelector('#error').content.querySelector('.error');
+  const error = template.cloneNode(true);
+  //const closeErrorBtn = template.querySelector('.error__button');
+  document.body.append(error);
+
+  //closeErrorBtn.addEventListener('click', () => {
+  //  error.remove();
+  //});
+};
+
+
+export { isKeyEscape, showLoadError, showFormError };
