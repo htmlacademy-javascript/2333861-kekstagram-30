@@ -108,7 +108,9 @@ function closeModal() {
 
 
 loadPicture.addEventListener('change', openModal);
+
 previewPictureClose.addEventListener('click', closeModal);
+
 formUpload.addEventListener('submit', (evt) => {
   const isValide = pristine.validate();
   if (!isValide) {

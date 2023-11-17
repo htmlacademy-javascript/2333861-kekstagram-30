@@ -18,4 +18,14 @@ const createIdGenerator = () => {
 
 const isKeyEscape = (evt) => evt.key === 'Escape';
 
-export { getRandomNumber, getRandomArrayElement, createIdGenerator, isKeyEscape };
+const showError = () => {
+  const template = document.querySelector('#data-error').content;
+  const error = template.querySelector('.data-error');
+  document.body.append(error);
+
+  setTimeout(() => {
+    error.remove();
+  }, 5000);
+};
+
+export { getRandomNumber, getRandomArrayElement, createIdGenerator, isKeyEscape, showError };
