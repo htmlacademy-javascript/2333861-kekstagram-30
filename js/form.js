@@ -19,6 +19,7 @@ const hashPicture = formUpload.querySelector('.text__hashtags');
 const commentPicture = formUpload.querySelector('.text__description');
 const previewPictureClose = formUpload.querySelector('.img-upload__cancel');
 const scaleControl = formUpload.querySelector('.img-upload__scale');
+const imageElement = formUpload.querySelector('.img-upload__preview img');
 
 const stopPropagationOnFocus = (evt) => {
   if (isKeyEscape(evt)) {
@@ -89,6 +90,7 @@ function openModal() {
   document.addEventListener('keydown', onKeyEsc);
   hashPicture.addEventListener('keydown', stopPropagationOnFocus);
   commentPicture.addEventListener('keydown', stopPropagationOnFocus);
+  scaleControl.addEventListener('click', onClickScale);
 }
 
 function closeModal() {
@@ -100,10 +102,11 @@ function closeModal() {
   document.removeEventListener('keydown', onKeyEsc);
   hashPicture.removeEventListener('keydown', stopPropagationOnFocus);
   commentPicture.removeEventListener('keydown', stopPropagationOnFocus);
+  imageElement.style.transform = 'scale(1)';
+  scaleControl.removeEventListener('click', onClickScale);
 }
 
 
-scaleControl.addEventListener('click', onClickScale);
 loadPicture.addEventListener('change', openModal);
 previewPictureClose.addEventListener('click', closeModal);
 formUpload.addEventListener('submit', (evt) => {
