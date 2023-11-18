@@ -1,9 +1,10 @@
-import { showLoadError } from './util.js';
+import { showFormError } from './util.js';
 
 const SERVER_URL = 'https://30.javascript.pages.academy/kekstagram';
 
 const serverRoute = {
   GET_DATA: '/data',
+  SEND_DATA: '55552/'
 };
 
 const httpMethod = {
@@ -25,11 +26,7 @@ const getAllPhoto = async () => {
 };
 
 const sendPhoto = async (data) => {
-  return request(
-    SERVER_URL,
-    httpMethod.POST,
-    data
-  )
+  return request(SERVER_URL + serverRoute.SEND_DATA, httpMethod.POST, data);
 };
 
 

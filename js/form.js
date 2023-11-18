@@ -1,4 +1,4 @@
-import { isKeyEscape } from './util.js';
+import { isKeyEscape, showFormSend, showFormError } from './util.js';
 import { onClickScale } from './scale.js';
 import {
   init as initEffect,
@@ -39,7 +39,8 @@ const stopPropagationOnFocus = (evt) => {
 };
 
 const onKeyEsc = (evt) => {
-  if (isKeyEscape(evt)) {
+  const isErrorMessageExist = Boolean(document.querySelector('.error'));
+  if (isKeyEscape(evt) && !isErrorMessageExist) {
     evt.preventDefault();
     closeModal();
   }
@@ -117,22 +118,33 @@ function closeModal() {
   scaleControl.removeEventListener('click', onClickScale);
 }
 
+async function sendForm(formElement) {
+  const isValide = pristine.validate();
+  if (!isValide) {
+    return;
+  }
+  try {
+    toggleSubmitButton(true);
+    await sendPhoto(new FormData(formElement));
+    closeModal();
+    showFormSend();
+  } catch {
+    showFormError();
+  } finally {
+    toggleSubmitButton(false);
+  }
+}
+
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  sendForm(evt.target);
+};
+
 loadPicture.addEventListener('change', openModal);
 
 previewPictureClose.addEventListener('click', closeModal);
 
-formUpload.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  const isValide = pristine.validate();
-  if (isValide) {
-    toggleSubmitButton(true);
-    const formData = new FormData(evt.target);
-    sendPhoto(formData);
-    toggleSubmitButton(false);
-    closeModal();
-  }
-});
-
+formUpload.addEventListener('submit', onFormSubmit);
 
 initEffect();
 
