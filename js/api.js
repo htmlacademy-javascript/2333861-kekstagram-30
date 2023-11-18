@@ -1,10 +1,8 @@
-import { showFormError } from './util.js';
-
 const SERVER_URL = 'https://30.javascript.pages.academy/kekstagram';
 
 const serverRoute = {
   GET_DATA: '/data',
-  SEND_DATA: '55552/'
+  SEND_DATA: '/'
 };
 
 const httpMethod = {
