@@ -19,13 +19,8 @@ const request = async (url, method = httpMethod.GET, body = null) => {
   }
 };
 
-const getAllPhoto = async () => {
-  return request(SERVER_URL + serverRoute.GET_DATA);
-};
+const getAllPhoto = async () => request(SERVER_URL + serverRoute.GET_DATA);
 
-const sendPhoto = async (data) => {
-  return request(SERVER_URL + serverRoute.SEND_DATA, httpMethod.POST, data);
-};
-
+const sendPhoto = async (data) => request(SERVER_URL + serverRoute.SEND_DATA, httpMethod.POST, data);
 
 export { getAllPhoto, sendPhoto };

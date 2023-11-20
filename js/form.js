@@ -11,7 +11,8 @@ const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const errorText = {
   INVALID_COUNT: `Максимум ${MAX_HASHTAG_COUNT} хэштэгов`,
   NOT_UNIQUE: 'Хэштеги должны быть уникальными',
-  INVALID_PATTERN: 'Неправильный хэштег'
+  INVALID_PATTERN: 'Неправильный хэштег',
+  INVALID_COUNT_TEXT: 'Не более 140 символов'
 };
 const formUpload = document.querySelector('#upload-select-image');
 const loadPicture = formUpload.querySelector('.img-upload__input');
@@ -39,7 +40,7 @@ const stopPropagationOnFocus = (evt) => {
 };
 
 const onKeyEsc = (evt) => {
-  const isErrorMessageExist = Boolean(document.querySelector('.error'));
+  const isErrorMessageExist = document.querySelector('.error');
   if (isKeyEscape(evt) && !isErrorMessageExist) {
     evt.preventDefault();
     closeModal();
@@ -53,7 +54,7 @@ const pristine = new Pristine(formUpload, {
 });
 
 const normalizeTag = (str) => {
-  const strfix = str.trim().split(' ').filter((tag) => Boolean(tag.length));
+  const strfix = str.trim().split(' ').filter((tag) => tag.length);
   return strfix;
 };
 
@@ -94,7 +95,7 @@ pristine.addValidator(
   true
 );
 
-pristine.addValidator(commentPicture, validateCommentLength, 'не более 140 символов');
+pristine.addValidator(commentPicture, validateCommentLength, errorText.INVALID_COUNT_TEXT);
 
 function openModal() {
   formPicture.classList.remove('hidden');
