@@ -4,7 +4,6 @@ const photoCard = template.querySelector('.picture');
 
 const createPictures = (arr) => {
   const containerCards = document.createDocumentFragment();
-
   arr.forEach(({ id, url, description, comments, likes }) => {
     const card = photoCard.cloneNode(true);
     const cardImage = card.querySelector('.picture__img');

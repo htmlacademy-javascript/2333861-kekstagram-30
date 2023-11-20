@@ -1,16 +1,18 @@
-import { isKeyEscape } from './util.js';
+import { isKeyEscape, showFormSend, showFormError } from './util.js';
 import { onClickScale } from './scale.js';
 import {
   init as initEffect,
   reset as resetEffect
 } from './effects.js';
+import { sendPhoto } from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
 const errorText = {
   INVALID_COUNT: `Максимум ${MAX_HASHTAG_COUNT} хэштэгов`,
   NOT_UNIQUE: 'Хэштеги должны быть уникальными',
-  INVALID_PATTERN: 'Неправильный хэштег'
+  INVALID_PATTERN: 'Неправильный хэштег',
+  INVALID_COUNT_TEXT: 'Не более 140 символов'
 };
 const formUpload = document.querySelector('#upload-select-image');
 const loadPicture = formUpload.querySelector('.img-upload__input');
@@ -19,6 +21,17 @@ const hashPicture = formUpload.querySelector('.text__hashtags');
 const commentPicture = formUpload.querySelector('.text__description');
 const previewPictureClose = formUpload.querySelector('.img-upload__cancel');
 const scaleControl = formUpload.querySelector('.img-upload__scale');
+const imageElement = formUpload.querySelector('.img-upload__preview img');
+const buttonSubmit = formUpload.querySelector('.img-upload__submit');
+const submitButtonCaption = {
+  SUBMITTING: 'Отправляю..',
+  IDLE: 'Опубликовать'
+};
+
+const toggleSubmitButton = (isDisabled) => {
+  buttonSubmit.disabled = isDisabled;
+  buttonSubmit.textContent = isDisabled ? submitButtonCaption.SUBMITTING : submitButtonCaption.IDLE;
+};
 
 const stopPropagationOnFocus = (evt) => {
   if (isKeyEscape(evt)) {
@@ -27,7 +40,8 @@ const stopPropagationOnFocus = (evt) => {
 };
 
 const onKeyEsc = (evt) => {
-  if (isKeyEscape(evt)) {
+  const isErrorMessageExist = document.querySelector('.error');
+  if (isKeyEscape(evt) && !isErrorMessageExist) {
     evt.preventDefault();
     closeModal();
   }
@@ -40,7 +54,7 @@ const pristine = new Pristine(formUpload, {
 });
 
 const normalizeTag = (str) => {
-  const strfix = str.trim().split(' ').filter((tag) => Boolean(tag.length));
+  const strfix = str.trim().split(' ').filter((tag) => tag.length);
   return strfix;
 };
 
@@ -81,7 +95,7 @@ pristine.addValidator(
   true
 );
 
-pristine.addValidator(commentPicture, validateCommentLength, 'не более 140 символов');
+pristine.addValidator(commentPicture, validateCommentLength, errorText.INVALID_COUNT_TEXT);
 
 function openModal() {
   formPicture.classList.remove('hidden');
@@ -89,6 +103,7 @@ function openModal() {
   document.addEventListener('keydown', onKeyEsc);
   hashPicture.addEventListener('keydown', stopPropagationOnFocus);
   commentPicture.addEventListener('keydown', stopPropagationOnFocus);
+  scaleControl.addEventListener('click', onClickScale);
 }
 
 function closeModal() {
@@ -100,16 +115,37 @@ function closeModal() {
   document.removeEventListener('keydown', onKeyEsc);
   hashPicture.removeEventListener('keydown', stopPropagationOnFocus);
   commentPicture.removeEventListener('keydown', stopPropagationOnFocus);
+  imageElement.style.transform = 'scale(1)';
+  scaleControl.removeEventListener('click', onClickScale);
 }
 
-
-scaleControl.addEventListener('click', onClickScale);
-loadPicture.addEventListener('change', openModal);
-previewPictureClose.addEventListener('click', closeModal);
-formUpload.addEventListener('submit', (evt) => {
+async function sendForm(formElement) {
   const isValide = pristine.validate();
   if (!isValide) {
-    evt.preventDefault();
+    return;
   }
-});
+  try {
+    toggleSubmitButton(true);
+    await sendPhoto(new FormData(formElement));
+    closeModal();
+    showFormSend();
+  } catch {
+    showFormError();
+  } finally {
+    toggleSubmitButton(false);
+  }
+}
+
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  sendForm(evt.target);
+};
+
+loadPicture.addEventListener('change', openModal);
+
+previewPictureClose.addEventListener('click', closeModal);
+
+formUpload.addEventListener('submit', onFormSubmit);
+
 initEffect();
+
