@@ -14,9 +14,9 @@ const createPictures = (arr) => {
     card.querySelector('.picture__likes').textContent = likes;
     containerCards.appendChild(card);
   });
-
   photoContainer.appendChild(containerCards);
 };
+
 
 export { createPictures };
 
