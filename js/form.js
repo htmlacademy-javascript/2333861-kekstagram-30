@@ -27,6 +27,8 @@ const submitButtonCaption = {
   SUBMITTING: 'Отправляю..',
   IDLE: 'Опубликовать'
 };
+const FILE_TYPES = ['.img', '.png', '.gif', '.jpg'];
+const prewiewPhotoMini = document.querySelectorAll('.effects__preview');
 
 const toggleSubmitButton = (isDisabled) => {
   buttonSubmit.disabled = isDisabled;
@@ -46,6 +48,21 @@ const onKeyEsc = (evt) => {
     closeModal();
   }
 };
+
+const uploadingAnImage = () => {
+  const file = loadPicture.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+  if (matches) {
+    imageElement.src = URL.createObjectURL(file);
+  }
+  prewiewPhotoMini.forEach((item) => {
+    item.style.backgroundImage = `url("${URL.createObjectURL(file)}")`;
+  });
+
+  openModal();
+};
+
 
 const pristine = new Pristine(formUpload, {
   classTo: 'img-upload__field-wrapper',
@@ -141,7 +158,7 @@ const onFormSubmit = (evt) => {
   sendForm(evt.target);
 };
 
-loadPicture.addEventListener('change', openModal);
+loadPicture.addEventListener('change', uploadingAnImage);
 
 previewPictureClose.addEventListener('click', closeModal);
 
