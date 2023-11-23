@@ -1,24 +1,27 @@
-const modalElement = document.querySelector('.img-upload');
-const scaleValue = modalElement.querySelector('.scale__control--value');
-const imageElement = modalElement.querySelector('.img-upload__preview img');
+const MIN_SCALE = 25;
+const MAX_SCALE = 100;
+const STEP_SCALE = 25;
+const imageEditForm = document.querySelector('.img-upload');
+const scaleSwitch = imageEditForm.querySelector('.scale__control--value');
+const imageElementFormModal = imageEditForm.querySelector('.img-upload__preview img');
 
-function onClickScale(evt) {
-  const str = scaleValue.value;
+const onClickScaleSwitch = (evt) => {
+  const str = scaleSwitch.value;
   const currentValue = Number(str.substring(0, str.length - 1));
 
   if (evt.target.classList.contains('scale__control--smaller')) {
-    if (currentValue > 25) {
-      scaleValue.value = `${currentValue - 25}%`;
-      imageElement.style.transform = `scale(${(currentValue - 25) / 100})`;
+    if (currentValue > MIN_SCALE) {
+      scaleSwitch.value = `${currentValue - STEP_SCALE}%`;
+      imageElementFormModal.style.transform = `scale(${(currentValue - STEP_SCALE) / 100})`;
     }
   }
 
   if (evt.target.classList.contains('scale__control--bigger')) {
-    if (currentValue < 100) {
-      scaleValue.value = `${currentValue + 25}%`;
-      imageElement.style.transform = `scale(${(currentValue + 25) / 100})`;
+    if (currentValue < MAX_SCALE) {
+      scaleSwitch.value = `${currentValue + STEP_SCALE}%`;
+      imageElementFormModal.style.transform = `scale(${(currentValue + STEP_SCALE) / 100})`;
     }
   }
-}
+};
 
-export { onClickScale };
+export { onClickScaleSwitch };

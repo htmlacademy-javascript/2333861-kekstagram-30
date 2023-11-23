@@ -1,17 +1,17 @@
-import { createPictures } from './mini-photo.js';
-import { createBigPhoto } from './large-image.js';
+import { drawAllPictures } from './mini-photo.js';
+import { drawPictureModal } from './large-image.js';
 import './form.js';
 import { showLoadError } from './util.js';
 import { getAllPhoto } from './api.js';
-import { showFilter } from './filters.js';
+import { showFilterSwitch } from './filters.js';
 
 
 const bootstrap = async () => {
   try {
     const pictures = await getAllPhoto();
-    createPictures(pictures);
-    createBigPhoto(pictures);
-    showFilter(pictures);
+    drawAllPictures(pictures);
+    drawPictureModal(pictures);
+    showFilterSwitch(pictures);
   } catch (err) {
     showLoadError();
   }

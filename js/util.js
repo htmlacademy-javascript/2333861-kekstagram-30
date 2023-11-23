@@ -1,3 +1,7 @@
+const ERROR_TIMEOUT = 5000;
+
+const getRandomIndex = (min, max) => Math.floor(Math.random() * (max - min));
+
 const isKeyEscape = (evt) => evt.key === 'Escape';
 
 const showLoadError = () => {
@@ -7,17 +11,17 @@ const showLoadError = () => {
 
   setTimeout(() => {
     errorLoad.remove();
-  }, 5000);
+  }, ERROR_TIMEOUT);
 };
 
 const hideMessage = () => {
   const existsElement = document.querySelector('.success') || document.querySelector('.error');
   existsElement.remove();
-  document.removeEventListener('keydown', onKeyEsc);
+  document.removeEventListener('keydown', onKeyEscPress);
   document.body.removeEventListener('click', onBodyClick);
 };
 
-function onKeyEsc(evt) {
+function onKeyEscPress(evt) {
   if (isKeyEscape(evt)) {
     evt.preventDefault();
     hideMessage();
@@ -35,35 +39,35 @@ function onBodyClick(evt) {
   hideMessage();
 }
 
+const formSubmitHandler = (template, className) => {
+  const templateElement = template.cloneNode(true);
+  const closeBtn = templateElement.querySelector(`.${className}__button`);
+  document.addEventListener('keydown', onKeyEscPress);
+  document.body.addEventListener('click', onBodyClick);
+  document.body.append(templateElement);
+  closeBtn.addEventListener('click', onCloseButtonClick);
+};
+
+
 const showFormSend = () => {
   const template = document.querySelector('#success').content.querySelector('.success');
-  const sucsessSend = template.cloneNode(true);
-  const closeSendBtn = sucsessSend.querySelector('.success__button');
-  document.addEventListener('keydown', onKeyEsc);
-  document.body.addEventListener('click', onBodyClick);
-  document.body.append(sucsessSend);
-
-  closeSendBtn.addEventListener('click', onCloseButtonClick);
+  formSubmitHandler(template, template.className);
 };
+
 
 const showFormError = () => {
   const template = document.querySelector('#error').content.querySelector('.error');
-  const errorSend = template.cloneNode(true);
-  const closeErrorBtn = errorSend.querySelector('.error__button');
-  document.addEventListener('keydown', onKeyEsc);
-  document.body.addEventListener('click', onBodyClick);
-  document.body.append(errorSend);
-
-  closeErrorBtn.addEventListener('click', onCloseButtonClick);
+  formSubmitHandler(template, template.className);
 };
 
-function debounce(callback, timeoutDelay = 500) {
+
+const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
+};
 
 
-export { isKeyEscape, showLoadError, showFormSend, showFormError, debounce };
+export { getRandomIndex, isKeyEscape, showLoadError, showFormSend, showFormError, debounce };

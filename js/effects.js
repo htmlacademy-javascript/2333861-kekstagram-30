@@ -67,12 +67,12 @@ const effectToSliderOptions = {
   },
 };
 
-const modalElement = document.querySelector('.img-upload');
-const imageElement = modalElement.querySelector('.img-upload__preview img');
-const effectsElement = modalElement.querySelector('.effects');
-const sliderContainerElement = modalElement.querySelector('.img-upload__effect-level');
-const sliderElement = modalElement.querySelector('.effect-level__slider');
-const effectLevelElement = modalElement.querySelector('.effect-level__value');
+const imageEditForm = document.querySelector('.img-upload');
+const imageElementFormModal = imageEditForm.querySelector('.img-upload__preview img');
+const effectsElement = imageEditForm.querySelector('.effects');
+const sliderContainerElement = imageEditForm.querySelector('.img-upload__effect-level');
+const sliderElement = imageEditForm.querySelector('.effect-level__slider');
+const effectLevelElement = imageEditForm.querySelector('.effect-level__value');
 
 let chosenEffect = Effects.DEFAULT;
 
@@ -80,12 +80,12 @@ const isDefault = () => chosenEffect === Effects.DEFAULT;
 
 const setImageStyle = () => {
   if (isDefault()) {
-    imageElement.style.filter = null;
+    imageElementFormModal.style.filter = null;
   }
 
   const { value } = effectLevelElement;
   const { style, unit } = effectToFilter[chosenEffect];
-  imageElement.style.filter = `${style}(${value}${unit})`;
+  imageElementFormModal.style.filter = `${style}(${value}${unit})`;
 };
 
 const showSlider = () => {
