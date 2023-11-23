@@ -5,7 +5,6 @@ import { showLoadError } from './util.js';
 import { getAllPhoto } from './api.js';
 import { showFilterSwitch } from './filters.js';
 
-
 const bootstrap = async () => {
   try {
     const pictures = await getAllPhoto();

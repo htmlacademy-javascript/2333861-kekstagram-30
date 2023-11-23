@@ -30,16 +30,19 @@ const submitButtonCaption = {
 const FILE_TYPES = ['.img', '.png', '.gif', '.jpg'];
 const effectsImageFormModal = document.querySelectorAll('.effects__preview');
 
+
 const toggleSubmitButton = (isDisabled) => {
   buttonSubmitFormModal.disabled = isDisabled;
   buttonSubmitFormModal.textContent = isDisabled ? submitButtonCaption.SUBMITTING : submitButtonCaption.IDLE;
 };
+
 
 const stopPropagationOnFocus = (evt) => {
   if (isKeyEscape(evt)) {
     evt.stopPropagation();
   }
 };
+
 
 const onKeyEscPress = (evt) => {
   const isErrorMessageExist = document.querySelector('.error');
@@ -48,6 +51,7 @@ const onKeyEscPress = (evt) => {
     hidePictureModal();
   }
 };
+
 
 const uploadingUserImage = () => {
   const file = uploadedImage.files[0];
@@ -70,23 +74,29 @@ const pristine = new Pristine(photoUploadForm, {
   errorTextClass: 'img-upload__field-wrapper__error-text'
 });
 
+
 const normalizeTag = (str) => {
   const strfix = str.trim().split(' ').filter((tag) => tag.length);
   return strfix;
 };
 
+
 const hasValidTags = (value) => normalizeTag(value).every((tag) => VALID_SYMBOLS.test(tag));
 
+
 const hasValidCount = (value) => normalizeTag(value).length <= MAX_HASHTAG_COUNT;
+
 
 const hasUniqueTags = (value) => {
   const lowerCaseTags = normalizeTag(value).map((tag) => tag.toLowerCase());
   return lowerCaseTags.length === new Set(lowerCaseTags).size; //set обьект для сравнения
 };
 
+
 function validateCommentLength(value) {
   return value.length <= 140;
 }
+
 
 pristine.addValidator(
   hashtagFormModal,
@@ -96,6 +106,7 @@ pristine.addValidator(
   true
 );
 
+
 pristine.addValidator(
   hashtagFormModal,
   hasUniqueTags,
@@ -103,6 +114,7 @@ pristine.addValidator(
   2,
   true
 );
+
 
 pristine.addValidator(
   hashtagFormModal,
@@ -112,7 +124,9 @@ pristine.addValidator(
   true
 );
 
+
 pristine.addValidator(descriptionFormModal, validateCommentLength, errorText.INVALID_COUNT_TEXT);
+
 
 function openPictureModal() {
   formModal.classList.remove('hidden');
@@ -122,6 +136,7 @@ function openPictureModal() {
   descriptionFormModal.addEventListener('keydown', stopPropagationOnFocus);
   scaleControlFormModal.addEventListener('click', onClickScaleSwitch);
 }
+
 
 function hidePictureModal() {
   photoUploadForm.reset();

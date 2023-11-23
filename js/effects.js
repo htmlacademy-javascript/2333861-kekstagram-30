@@ -88,18 +88,22 @@ const setImageStyle = () => {
   imageElementFormModal.style.filter = `${style}(${value}${unit})`;
 };
 
+
 const showSlider = () => {
   sliderContainerElement.classList.remove('hidden');
 };
+
 
 const hideSlider = () => {
   sliderContainerElement.classList.add('hidden');
 };
 
+
 const onSliderUpdate = () => {
   effectLevelElement.value = sliderElement.noUiSlider.get();
   setImageStyle();
 };
+
 
 const createSlider = ({ min, max, step }) => {
   noUiSlider.create(sliderElement, {
@@ -125,6 +129,7 @@ const updateSlider = ({ min, max, step }) => {
   });
 };
 
+
 const setSlider = () => {
   if (isDefault()) {
     hideSlider();
@@ -134,23 +139,28 @@ const setSlider = () => {
   }
 };
 
+
 const setEffect = (effect) => {
   chosenEffect = effect;
   setSlider();
   setImageStyle();
 };
 
+
 const reset = () => {
   setEffect(Effects.DEFAULT);
 };
+
 
 const onEffectsChange = (evt) => {
   setEffect(evt.target.value);
 };
 
+
 const init = () => {
   createSlider(effectToSliderOptions[chosenEffect]);
   effectsElement.addEventListener('change', onEffectsChange);
 };
+
 
 export { init, reset };

@@ -24,4 +24,5 @@ const onClickScaleSwitch = (evt) => {
   }
 };
 
+
 export { onClickScaleSwitch };

@@ -14,12 +14,14 @@ const showLoadError = () => {
   }, ERROR_TIMEOUT);
 };
 
+
 const hideMessage = () => {
   const existsElement = document.querySelector('.success') || document.querySelector('.error');
   existsElement.remove();
   document.removeEventListener('keydown', onKeyEscPress);
   document.body.removeEventListener('click', onBodyClick);
 };
+
 
 function onKeyEscPress(evt) {
   if (isKeyEscape(evt)) {
@@ -28,9 +30,11 @@ function onKeyEscPress(evt) {
   }
 }
 
+
 function onCloseButtonClick() {
   hideMessage();
 }
+
 
 function onBodyClick(evt) {
   if (evt.target.closest('.success__inner') || evt.target.closest('.error__inner')) {
@@ -38,6 +42,7 @@ function onBodyClick(evt) {
   }
   hideMessage();
 }
+
 
 const formSubmitHandler = (template, className) => {
   const templateElement = template.cloneNode(true);

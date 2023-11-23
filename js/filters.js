@@ -6,6 +6,7 @@ const filterBtnsContainer = document.querySelector('.img-filters');
 const formFilterBtns = document.querySelector('.img-filters__form');
 let currentFilter = 'filter-default';
 
+
 const filterHandlers = {
   'filter-default': (data) => data,
   'filter-random': (data) => {
@@ -22,6 +23,7 @@ const filterHandlers = {
   'filter-discussed': (data) => [...data].sort((item1, item2) => item2.comments.length - item1.comments.length)
 };
 
+
 const repaintPictures = (filter, data) => {
   if (currentFilter !== filter) {
     const filterData = filterHandlers[filter](data);
@@ -34,7 +36,9 @@ const repaintPictures = (filter, data) => {
   }
 };
 
+
 const debouncerepaintPictures = debounce(repaintPictures);
+
 
 const showFilterSwitch = (data) => {
   filterBtnsContainer.classList.remove('img-filters--inactive');
@@ -48,5 +52,6 @@ const showFilterSwitch = (data) => {
     debouncerepaintPictures(evt.target.id, data);
   });
 };
+
 
 export { showFilterSwitch };

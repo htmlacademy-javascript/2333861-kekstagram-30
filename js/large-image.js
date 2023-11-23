@@ -66,11 +66,13 @@ const onKeyEscPress = (evt) => {
   }
 };
 
+
 function openPictureModal() {
   pictureModal.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onKeyEscPress);
 }
+
 
 function hidePictureModal() {
   commentsCountShown = 0;
@@ -78,6 +80,7 @@ function hidePictureModal() {
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onKeyEscPress);
 }
+
 
 const drawPictureModal = (arr) => {
   allPictures.addEventListener('click', (evt) => {
@@ -109,5 +112,6 @@ const drawPictureModal = (arr) => {
 
 closePictureModal.addEventListener('click', hidePictureModal);
 btnMoreComments.addEventListener('click', onCommentsloaderClick);
+
 
 export { drawPictureModal };

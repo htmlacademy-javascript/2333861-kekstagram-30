@@ -1,6 +1,7 @@
 const photoContainer = document.querySelector('.pictures');
 const photoCard = document.querySelector('#picture').content.querySelector('.picture');
 
+
 const drawAllPictures = (arr) => {
   const containerCards = document.createDocumentFragment();
   arr.forEach(({ id, url, description, comments, likes }) => {
