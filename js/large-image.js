@@ -24,7 +24,7 @@ const drawComment = ({ avatar, message, name }) => {
 
 
 const renderComments = () => {
-  if (comments.length >= 5) {
+  if (comments.length >= COMMENTS_COUNT) {
     commentsCountShown += COMMENTS_COUNT;
     if (commentsCountShown > comments.length) {
       commentsCountShown = comments.length;
@@ -54,7 +54,7 @@ const renderComments = () => {
 };
 
 
-const onCommentsloaderClick = () => {
+const onCommentsLoaderClick = () => {
   renderComments();
 };
 
@@ -111,7 +111,7 @@ const drawPictureModal = (arr) => {
 
 
 closePictureModal.addEventListener('click', hidePictureModal);
-btnMoreComments.addEventListener('click', onCommentsloaderClick);
+btnMoreComments.addEventListener('click', onCommentsLoaderClick);
 
 
 export { drawPictureModal };

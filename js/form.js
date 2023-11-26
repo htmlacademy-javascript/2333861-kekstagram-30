@@ -15,7 +15,6 @@ const errorText = {
   INVALID_COUNT_TEXT: 'Не более 140 символов'
 };
 const photoUploadForm = document.querySelector('#upload-select-image');
-const uploadedImage = photoUploadForm.querySelector('.img-upload__input');
 const formModal = photoUploadForm.querySelector('.img-upload__overlay');
 const hashtagFormModal = photoUploadForm.querySelector('.text__hashtags');
 const descriptionFormModal = photoUploadForm.querySelector('.text__description');
@@ -27,8 +26,6 @@ const submitButtonCaption = {
   SUBMITTING: 'Отправляю..',
   IDLE: 'Опубликовать'
 };
-const FILE_TYPES = ['.img', '.png', '.gif', '.jpg'];
-const effectsImageFormModal = document.querySelectorAll('.effects__preview');
 
 
 const toggleSubmitButton = (isDisabled) => {
@@ -53,21 +50,6 @@ const onKeyEscPress = (evt) => {
 };
 
 
-const uploadingUserImage = () => {
-  const file = uploadedImage.files[0];
-  const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
-  if (matches) {
-    imageElementFormModal.src = URL.createObjectURL(file);
-  }
-  effectsImageFormModal.forEach((item) => {
-    item.style.backgroundImage = `url("${URL.createObjectURL(file)}")`;
-  });
-
-  openPictureModal();
-};
-
-
 const pristine = new Pristine(photoUploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -75,10 +57,7 @@ const pristine = new Pristine(photoUploadForm, {
 });
 
 
-const normalizeTag = (str) => {
-  const strfix = str.trim().split(' ').filter((tag) => tag.length);
-  return strfix;
-};
+const normalizeTag = (str) => str.trim().split(' ').filter((tag) => tag.length);
 
 
 const hasValidTags = (value) => normalizeTag(value).every((tag) => VALID_SYMBOLS.test(tag));
@@ -149,6 +128,7 @@ function hidePictureModal() {
   descriptionFormModal.removeEventListener('keydown', stopPropagationOnFocus);
   imageElementFormModal.style.transform = 'scale(1)';
   scaleControlFormModal.removeEventListener('click', onClickScaleSwitch);
+  imageElementFormModal.src = '';
 }
 
 
@@ -175,11 +155,12 @@ const onFormSubmit = (evt) => {
   sendForm(evt.target);
 };
 
-uploadedImage.addEventListener('change', uploadingUserImage);
 
 closeBtnFormModal.addEventListener('click', hidePictureModal);
-
 photoUploadForm.addEventListener('submit', onFormSubmit);
 
 initEffect();
+
+
+export { openPictureModal };
 
