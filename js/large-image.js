@@ -79,6 +79,7 @@ function hidePictureModal() {
   pictureModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onKeyEscPress);
+  pictureModal.querySelector('img').src = '';
 }
 
 
